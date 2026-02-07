@@ -108,8 +108,16 @@ def train_xgb_model_optimized(X_dynamic, X_static, y, n_trials=20):
     # 3. 强制转换分类变量
     X['IGBP'] = X['IGBP'].astype('category')
 
-    X_train_full, X_test, y_train_full, y_test = train_test_split(X, y_reshaped, test_size=0.2, random_state=42)
-    X_train, X_val, y_train, y_val = train_test_split(X_train_full, y_train_full, test_size=0.25, random_state=42)
+    # 先划分 20% 测试集
+    X_train_full, X_test, y_train_full, y_test = train_test_split(
+        X, y_reshaped, test_size=0.2, random_state=42
+    )
+    
+    # 在剩余 80% 中划分 10% / 70%
+    # 10% / 80% = 0.125
+    X_train, X_val, y_train, y_val = train_test_split(
+        X_train_full, y_train_full, test_size=0.125, random_state=42
+    )
 
     # 5. Optuna 调参
     print(f"开始 Optuna 搜索 (共 {n_trials} 次)...")
@@ -186,4 +194,5 @@ if __name__ == '__main__':
     plot_performance(y_test, y_pred, PLOT_FILENAME, csv_path=CSV_FILENAME)
 
     end_time = time.time()
+
     print(f"\n全过程耗时 {(end_time - start_time) / 60:.2f} 分钟。")
