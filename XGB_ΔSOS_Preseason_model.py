@@ -188,7 +188,7 @@ if __name__ == '__main__':
     X_dynamic, X_static, y = preprocess_data(*data_tuple)
 
     # 3. 训练模型
-    y_test, y_pred, X_test = train_xgb_model_optimized(X_dynamic, X_static, y, n_trials=50)
+    y_test, y_pred, X_test = train_xgb_model_optimized(X_dynamic, X_static, y, n_trials=200)
 
     # 4. 绘图
     plot_performance(y_test, y_pred, PLOT_FILENAME, csv_path=CSV_FILENAME)
@@ -196,3 +196,4 @@ if __name__ == '__main__':
     end_time = time.time()
 
     print(f"\n全过程耗时 {(end_time - start_time) / 60:.2f} 分钟。")
+
